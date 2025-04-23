@@ -7,12 +7,12 @@ router = APIRouter()
 
 @router.post("/company/")
 def create_company(company: dto.CompanyCreate, db: Session = Depends(get_db)):
-    return crud.create_company(db, company)
+    return crud.createCompany(db, company)
 
 @router.post("/employee/")
 def create_employee(profile: dto.EmployeeProfileCreate, db: Session = Depends(get_db)):
-    return crud.create_employee_profile(db, profile)
+    return crud.createEmployeeProfile(db, profile)
 
 @router.post("/upload-jd/")
 def upload_jd(jd: dto.JobDescriptionCreate, db: Session = Depends(get_db)):
-    return crud.create_job_description(db, jd)
+    return crud.createJobDescription(db, jd)

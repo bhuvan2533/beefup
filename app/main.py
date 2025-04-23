@@ -16,4 +16,4 @@ app.add_exception_handler(NotFoundException, not_found_exception_handler)
 Base.metadata.create_all(bind=engine)
 
 
-app.include_router(api_router, prefix="/api")
+app.include_router(api_router, prefix="/api/v1")
