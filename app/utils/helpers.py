@@ -1,34 +1,51 @@
 from docx import Document
 import textract
 from pdfminer.high_level import extract_text
-import re
-from nltk.corpus import stopwords
+from fastapi import UploadFile
+from app.exception_handlers import InvalidFileTypeException
+from io import BytesIO
+import json
+import tempfile
 
-def extract_text_from_doc(file_path: str) -> str:
-    text = textract.process(file_path)
+def extract_text_from_pdf(uploaded_file: UploadFile) -> str:
+    uploaded_file.file.seek(0)
+    with tempfile.NamedTemporaryFile(delete=True, suffix=".pdf") as tmp:
+        tmp.write(uploaded_file.file.read())
+        tmp.flush()
+        raw_text = extract_text(tmp.name)
+    
+    return json.dumps(raw_text)[1:-1]
+
+
+def extract_text_from_docx(uploaded_file: UploadFile) -> str:
+    uploaded_file.file.seek(0)
+    content = uploaded_file.file.read()
+    document = Document(BytesIO(content))
+    return json.dumps("\n".join([para.text for para in document.paragraphs]))[1:-1]
+
+
+def extract_text_from_doc(uploaded_file: UploadFile) -> str:
+    uploaded_file.file.seek(0)
+    content = uploaded_file.file.read()
+    text = textract.process(BytesIO(content), extension='doc')
     return text.decode('utf-8')
 
-def extract_text_from_pdf(file_path: str) -> str:
-    text = extract_text(file_path)
-    return text
 
-def extract_text_from_docx(file_path: str) -> str:
-    doc = Document(file_path)
-    return "\n".join([para.text for para in doc.paragraphs])
+def extract_text_from_txt(uploaded_file: UploadFile) -> str:
+    uploaded_file.file.seek(0)
+    return uploaded_file.file.read().decode("utf-8")
 
-def extract_text_from_file(file_path: str) -> str:
-    if file_path.endswith(".pdf"):
-        return extract_text_from_pdf(file_path)
-    elif file_path.endswith(".docx"):
-        return extract_text_from_docx(file_path)
-    elif file_path.endswith(".doc"):
-        return extract_text_from_doc(file_path)
+
+def extract_text_from_file(uploaded_file: UploadFile) -> str:
+    filename = uploaded_file.filename.lower()
+
+    if filename.endswith(".pdf"):
+        return extract_text_from_pdf(uploaded_file)
+    elif filename.endswith(".docx"):
+        return extract_text_from_docx(uploaded_file)
+    elif filename.endswith(".doc"):
+        return extract_text_from_doc(uploaded_file)
+    elif filename.endswith(".txt"):
+        return extract_text_from_txt(uploaded_file)
     else:
-        raise ValueError("Unsupported file format")
-
-
-print(extract_text_from_file('app/utils/Praveen.pdf'))
-
-# import os
-# print(os.path.exists())  # should return True
-
+        raise InvalidFileTypeException("Unsupported file format. Supported formats: .pdf, .docx, .doc, .txt")

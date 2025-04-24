@@ -20,11 +20,14 @@ class EmployeeProfile(Base, TimestampMixin):
     __tablename__ = "employee_profile"
     id = Column(Integer, primary_key=True, index=True)
     company_id = Column(Integer, ForeignKey("company.id"))
+    job_description_id = Column(Integer, ForeignKey("job_description.id"))
     name = Column(String, nullable=False)
     parsed_content = Column(Text, nullable=False)
     match_percentage = Column(Integer)
+    filename = Column(String, nullable=False)
 
     company = relationship("Company", back_populates="employees")
+    job_description = relationship("JobDescription", back_populates="employee_profile") 
     enhanced_profiles = relationship("EnhancedProfile", back_populates="employee")
 
 
@@ -35,8 +38,10 @@ class JobDescription(Base, TimestampMixin):
     company_id = Column(Integer, ForeignKey("company.id"))
     title = Column(String, nullable=False)
     content = Column(Text, nullable=False)
+    filename = Column(String, nullable=False)
 
     company = relationship("Company", back_populates="job_descriptions")
+    employee_profile = relationship("EmployeeProfile", back_populates="job_description")
     enhanced_profiles = relationship("EnhancedProfile", back_populates="job_description", cascade="all, delete-orphan")
 
 
