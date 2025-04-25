@@ -6,6 +6,8 @@ from app.exception_handlers import InvalidFileTypeException
 from io import BytesIO
 import json
 import tempfile
+import gzip
+import base64
 
 def extract_text_from_pdf(uploaded_file: UploadFile) -> str:
     uploaded_file.file.seek(0)
@@ -49,3 +51,11 @@ def extract_text_from_file(uploaded_file: UploadFile) -> str:
         return extract_text_from_txt(uploaded_file)
     else:
         raise InvalidFileTypeException("Unsupported file format. Supported formats: .pdf, .docx, .doc, .txt")
+
+def compress_string(input_string):
+    compressed = gzip.compress(input_string.encode('utf-8'))
+    return base64.b64encode(compressed).decode('utf-8')
+
+def decompress_string(encoded_string):
+    compressed = base64.b64decode(encoded_string.encode('utf-8'))
+    return gzip.decompress(compressed).decode('utf-8')
