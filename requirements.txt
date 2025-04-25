@@ -12,6 +12,7 @@ cloudpathlib==0.21.0
 compressed-rtf==1.0.7
 confection==0.1.5
 cymem==2.0.11
+distro==1.9.0
 docx2txt==0.9
 ebcdic==1.1.1
 exceptiongroup==1.2.2
@@ -19,11 +20,14 @@ extract-msg==0.28.7
 fastapi==0.115.12
 filelock==3.18.0
 fsspec==2025.3.2
-h11==0.14.0
+h11==0.16.0
+httpcore==1.0.9
+httpx==0.28.1
 huggingface-hub==0.30.2
 idna==3.10
 IMAPClient==2.1.0
 Jinja2==3.1.6
+jiter==0.9.0
 joblib==1.4.2
 keybert==0.9.0
 langcodes==3.5.0
@@ -39,6 +43,7 @@ networkx==3.2.1
 nltk==3.9.1
 numpy==2.0.2
 olefile==0.47
+openai==1.76.0
 packaging==25.0
 pdfminer.six==20191110
 pillow==11.2.1
