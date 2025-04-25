@@ -15,7 +15,6 @@ def extract_text_from_pdf(uploaded_file: UploadFile) -> str:
         tmp.write(uploaded_file.file.read())
         tmp.flush()
         raw_text = extract_text(tmp.name)
-    
     return json.dumps(raw_text)[1:-1]
 
 

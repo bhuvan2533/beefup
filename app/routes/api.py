@@ -6,7 +6,7 @@ from typing import Optional
 
 router = APIRouter()
 
-@router.post("/company/")
+@router.post("/company")
 def create_company(company: dto.CompanyCreate, db: Session = Depends(get_db)):
     return crud.createCompany(db, company)
 
@@ -21,15 +21,14 @@ async def upload_file(
     jd_id_int = int(jd_id) if jd_id and jd_id.strip().isdigit() else None
     return crud.createFileEntry(db, file, file_type, company_id, name, jd_id=jd_id_int)
 
-
-@router.post("/enhance-profile/")
+@router.post("/enhance-profile")
 async def enhance_profile(
     jd_id: int,
     profile_id: int,
     db: Session = Depends(get_db)):
     return crud.enhanceProfile(db, profile_id, jd_id)
 
-@router.get("/enhance-with-prompt/")
+@router.post("/enhance-with-prompt")
 async def enhance_with_prompt(
     jd_id: int,
     profile_id: int,
