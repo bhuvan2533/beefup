@@ -7,8 +7,10 @@ from app.utils.logger import get_logger
 from app.utils.helpers import extract_text_from_file
 from app.services.match import calculate_similarity
 from app.services.enhance import enhance_profile
+from app.services.enhance import enhance_profile_with_prompt
+from app.utils.helpers import compress_string, decompress_string
 
-logger = get_logger()
+log = get_logger()
 def createCompany(db: Session, company: dto.CompanyCreate):
     new_company = models.Company(name=company.name)
     db.add(new_company)
@@ -37,13 +39,15 @@ def createEmployeeProfile(db: Session, profile: dto.EmployeeProfileCreate):
         filename=profile.filename,
         match_percentage=match_percentage,
         name=profile.name,
-        parsed_content=profile.parsed_content
+        parsed_content= compress_string(profile.parsed_content)
     )
   
     db.add(new_profile)
     with safe_commit_transaction(db):
         pass
     db.refresh(new_profile)
+
+    log.info(f"Employee profile created with ID: {new_profile.id} and match percentage: {match_percentage}")
     return {
         "profile_id": new_profile.id,
         "name": new_profile.name,
@@ -58,7 +62,7 @@ def createJobDescription(db: Session, jd: dto.JobDescriptionCreate):
     
     new_jd = models.JobDescription(
         company_id=jd.company_id,
-        content=jd.parsed_content,
+        content=compress_string(jd.parsed_content),
         title=jd.title,
         filename=jd.filename
     )
@@ -67,6 +71,7 @@ def createJobDescription(db: Session, jd: dto.JobDescriptionCreate):
     with safe_commit_transaction(db): 
         pass
     db.refresh(new_jd)
+    log.info(f"Job description created with ID: {new_jd.id} for company ID: {jd.company_id}")
     return {
         "jd_id": new_jd.id,
         "message": "Job description created successfully",
@@ -74,10 +79,12 @@ def createJobDescription(db: Session, jd: dto.JobDescriptionCreate):
 
 def createFileEntry(db: Session, file: UploadFile, file_type: str, company_id: int, name: str, jd_id: int):
     if file_type not in ["jd", "profile"]:
+        log.error(f"Invalid file type: {file_type}")
         raise ResourceNotFoundException("Invalid file type. Supported types are 'jd' and 'profile'.")
     parsed_content = extract_text_from_file(file)
 
     if not parsed_content:
+        log.error(f"File is empty or could not be parsed: {file.filename}")
         raise BadRequestException("File is empty or could not be parsed.")
     
     if file_type == "jd": 
@@ -86,6 +93,7 @@ def createFileEntry(db: Session, file: UploadFile, file_type: str, company_id: i
     elif file_type == "profile":
         profile = dto.EmployeeProfileCreate(company_id=company_id, name=name, filename=file.filename, parsed_content=parsed_content, jd_id=jd_id)
         if not jd_id:
+            log.error("JD ID is required for profile creation.")
             raise BadRequestException("JD ID is required for profile creation.")
         return createEmployeeProfile(db, profile)
     
@@ -101,28 +109,30 @@ def enhanceProfile(db: Session, profile_id: int, jd_id: int):
         return {
             "message": "Profile already enhanced",
             "match_percentage": existing_enhanced_profile.match_percentage,
-            "enhanced_content": existing_enhanced_profile.enhanced_content
+            "enhanced_content": decompress_string(existing_enhanced_profile.enhanced_content)
         }
     
 
     profile = db.query(models.EmployeeProfile).filter(models.EmployeeProfile.id == profile_id).first()
     if not profile:
+        log.error(f"Employee profile with ID {profile_id} does not exist.")
         raise ResourceNotFoundException(f"Employee profile with ID {profile_id} does not exist.")
     
     jd = db.query(models.JobDescription).filter(models.JobDescription.id == jd_id).first()
     if not jd:
+        log.error(f"Job description with ID {jd_id} does not exist.")
         raise ResourceNotFoundException(f"Job description with ID {jd_id} does not exist.")
 
-    enhanced_content = enhance_profile(profile.parsed_content, jd.content)
+    enhanced_content = enhance_profile(decompress_string(profile.parsed_content), decompress_string(jd.content))
 
      # Calculate match percentage
-    match_percentage = calculate_similarity(jd.content, enhanced_content)
+    match_percentage = calculate_similarity(decompress_string(jd.content), decompress_string(enhanced_content))
 
     enhanced_profile = models.EnhancedProfile(
         employee_id=profile.id,
         job_description_id=jd.id,
         match_percentage=match_percentage,
-        enhanced_content=enhanced_content
+        enhanced_content=compress_string(enhanced_content)
     )
     db.add(enhanced_profile)
 
@@ -132,7 +142,7 @@ def enhanceProfile(db: Session, profile_id: int, jd_id: int):
     return {
         "message": "Profile enhanced successfully",
         "match_percentage": match_percentage,
-        "enhanced_content": enhanced_content
+        "enhanced_content": decompress_string(enhanced_content)
     }
 
 def enhanceProfileWithPrompt(db: Session, profile_id: int, jd_id: int, prompt: str):
@@ -145,18 +155,20 @@ def enhanceProfileWithPrompt(db: Session, profile_id: int, jd_id: int, prompt: s
     jd = db.query(models.JobDescription).filter(models.JobDescription.id == jd_id).first()
 
     if not jd:
+        log.error(f"Job description with ID {jd_id} does not exist.")
         raise ResourceNotFoundException(f"Job description with ID {jd_id} does not exist.")
     
     if not existing_enhanced_profile:
+        log.error(f"Enhanced profile with ID {profile_id} does not exist.")
         raise ResourceNotFoundException(f"Enhanced profile with ID {profile_id} does not exist.")
 
-    enhanced_content = enhanceProfileWithPrompt(existing_enhanced_profile.enhanced_content, 
-                                    jd.content, prompt)
+    enhanced_content = enhance_profile_with_prompt(decompress_string(existing_enhanced_profile.enhanced_content), 
+                                    decompress_string(jd.content), prompt)
 
     # Calculate match percentage
-    match_percentage = calculate_similarity(jd.content, enhanced_content)
+    match_percentage = calculate_similarity(decompress_string(jd.content), decompress_string(enhanced_content))
 
-    existing_enhanced_profile.enhanced_content = enhanced_content
+    existing_enhanced_profile.enhanced_content = compress_string(enhanced_content)
     existing_enhanced_profile.match_percentage = match_percentage
     db.add(existing_enhanced_profile)
     with safe_commit_transaction(db):
@@ -165,5 +177,5 @@ def enhanceProfileWithPrompt(db: Session, profile_id: int, jd_id: int, prompt: s
     return {
         "message": "Profile enhanced successfully with the given prompt",
         "match_percentage": match_percentage,
-        "enhanced_content": enhanced_content
+        "enhanced_content": decompress_string(enhanced_content)
     }
