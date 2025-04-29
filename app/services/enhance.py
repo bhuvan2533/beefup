@@ -10,7 +10,7 @@ def enhance_profile(profile_content, jd_content):
     # Use OpenAI helper to enhance the profile
     enhanced_content = enhance_profile_with_ai(profile_content, jd_content)
     
-    logger.info("Profile enhancement completed")
+    logger.info("Profile enhancement completed: " + enhanced_content)
     return enhanced_content
 
 def enhance_profile_with_prompt(profile_content, jd_content, prompt):
