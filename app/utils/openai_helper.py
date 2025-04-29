@@ -17,38 +17,38 @@ def generate_ai_completion(messages, model="gpt-3.5-turbo", temperature=0.5, max
     try:
         logger.info(f"Sending request to OpenAI API using {model}")
         # Updated API call (openai.Chat.completions.create)
-        # response = openai.chat.completions.create(
-        #     model=model,
-        #     messages=messages,
-        #     temperature=temperature,
-        #     max_tokens=max_tokens,
-        # )
-
-        response = openai.types.chat.chat_completion.ChatCompletion(
-            id='chatcmpl-123456789abcdef',
-            choices=[
-                openai.types.chat.chat_completion.Choice(
-                    finish_reason='stop',
-                    index=0,
-                    logprobs=None,
-                    content='ENHANCED RESUME:\n\nName: Jane Smith\n\nSoftware Engineer\n\nSummary:\nDedicated software engineer with 6+ years of experience in building web applications using JavaScript, TypeScript, and Node.js. Skilled in creating RESTful APIs and scalable backend systems.\n\nSkills:\n- JavaScript, TypeScript\n- Node.js, Express.js\n- MongoDB, PostgreSQL\n- GraphQL, REST APIs\n- Git, Docker, Jenkins\n\nWork Experience:\n\nBackend Engineer - FinTech Inc (2021-Present)\n- Built and maintained financial transaction APIs with Node.js\n- Implemented caching using Redis to reduce response times\n- Led CI/CD pipeline setup and improved deployment efficiency\n\nFull Stack Developer - DevWorks (2017-2021)\n- Developed internal tools using MERN stack\n- Built user authentication and authorization systems\n- Worked closely with UX designers to improve usability',
-                    message=openai.types.chat.chat_completion.ChatCompletionMessage(
-                        role='assistant',
-                        function_call=None,
-                        tool_calls=None
-                    )
-                )
-            ],
-            created=1682375123,
-            model='gpt-3.5-turbo',
-            object='chat.completion',
-            system_fingerprint='fp_44455566',
-            usage=openai.types.completion_usage.CompletionUsage(
-                completion_tokens=350,
-                prompt_tokens=520,
-                total_tokens=870
-            )
+        response = openai.chat.completions.create(
+            model=model,
+            messages=messages,
+            temperature=temperature,
+            max_tokens=max_tokens,
         )
+
+        # response = openai.types.chat.chat_completion.ChatCompletion(
+        #     id='chatcmpl-123456789abcdef',
+        #     choices=[
+        #         openai.types.chat.chat_completion.Choice(
+        #             finish_reason='stop',
+        #             index=0,
+        #             logprobs=None,
+        #             content='ENHANCED RESUME:\n\nName: Jane Smith\n\nSoftware Engineer\n\nSummary:\nDedicated software engineer with 6+ years of experience in building web applications using JavaScript, TypeScript, and Node.js. Skilled in creating RESTful APIs and scalable backend systems.\n\nSkills:\n- JavaScript, TypeScript\n- Node.js, Express.js\n- MongoDB, PostgreSQL\n- GraphQL, REST APIs\n- Git, Docker, Jenkins\n\nWork Experience:\n\nBackend Engineer - FinTech Inc (2021-Present)\n- Built and maintained financial transaction APIs with Node.js\n- Implemented caching using Redis to reduce response times\n- Led CI/CD pipeline setup and improved deployment efficiency\n\nFull Stack Developer - DevWorks (2017-2021)\n- Developed internal tools using MERN stack\n- Built user authentication and authorization systems\n- Worked closely with UX designers to improve usability',
+        #             message=openai.types.chat.chat_completion.ChatCompletionMessage(
+        #                 role='assistant',
+        #                 function_call=None,
+        #                 tool_calls=None
+        #             )
+        #         )
+        #     ],
+        #     created=1682375123,
+        #     model='gpt-3.5-turbo',
+        #     object='chat.completion',
+        #     system_fingerprint='fp_44455566',
+        #     usage=openai.types.completion_usage.CompletionUsage(
+        #         completion_tokens=350,
+        #         prompt_tokens=520,
+        #         total_tokens=870
+        #     )
+        # )
         # content='ENHANCED RESUME:\n\nName: John Doe\n\nSoftware Engineer\n\nSummary:\nExperienced software developer with 5+ years specializing in Python, Django, and React. Proven track record of building scalable web applications and implementing efficient backend solutions.\n\nSkills:\n- Python, Django, Django REST Framework\n- JavaScript, React, Next.js\n- SQL (PostgreSQL, MySQL)\n- Docker, AWS, CI/CD\n- Git, Agile methodologies\n\nWork Experience:\n\nSenior Developer - ABC Tech (2022-Present)\n- Led development of microservices architecture using Django and FastAPI\n- Implemented authentication system with JWT and OAuth 2.0\n- Reduced database query times by 40% through optimization\n\nFull Stack Developer - XYZ Solutions (2019-2022)\n- Developed and maintained e-commerce platform using Django and React\n- Integrated payment gateways and third-party APIs\n- Implemented responsive design principles and accessibility features',
 
         logger.info(f"Response type: {type(response)}")
@@ -68,38 +68,48 @@ def generate_ai_completion(messages, model="gpt-3.5-turbo", temperature=0.5, max
         logger.error(f"Error calling OpenAI API: {str(e)}")
         raise InternalServerError(f"Failed to generate AI completion: {str(e)}")
 
-def format_text(text):
-    #Format text with escape characters for frontend display.
-    return json.dumps(text)[1:-1]
 
 def enhance_profile_with_ai(profile_content, jd_content):
     try:
         # Default system prompt for profile enhancement
-        system_prompt = """
-        You are an expert resume enhancer. Your task is to improve the provided resume 
-        to better align with the job description. Make the following improvements:
-        
-        1. Highlight relevant skills and experiences that match the job description
-        2. Reword achievements to better reflect the requirements
-        3. Reformat and organize content for better readability
-        4. Add industry-specific keywords from the job description
-        5. Maintain the original core facts and experiences
-        
-        Return the enhanced resume as a well-formatted string with appropriate escape characters 
-        for proper display in documents. Maintain proper formatting with newlines (\\n) and 
-        other formatting characters as needed and try to keep the enhanced profile in the same size
-        that of the profile
-        """
+        enhance_resume_prompt = """
+You are an expert resume enhancer. Your task is to improve the provided resume to better align with the job description. Make the following improvements:
+
+1. Highlight relevant skills and experiences that match the job description. No matter how the resume is structured, ensure that the most relevant skills and experiences are prominently displayed.
+from the job description.
+2. Reword achievements to better reflect the job requirements.
+3. Reorganize and enhance the content using clear, semantic HTML structure with tags like <h1>, <h2>, <p>, <b>, <ul>, and <li> for better readability and formatting.
+4. Add industry-specific keywords from the job description naturally throughout the resume.
+5. Maintain the original core facts and experiences and don't remove anything I want it in same length.
+6. **Maintain Word Count:** Ensure the enhanced resume stays within ±5% of the original word count.
+7. Do not add any new sections, you can enhance the existing sections but do not add any new sections
+9. Wherever the skills are present in the projects section add the relevant skill from the job description that are not already present in the resume.
+10. Important: And every project should have 4-6 liines of description and the relevant skills should be mentioned there itself.
+11. Important: So wherever the overall skills are mentioned, you need to add the skills from the job description that are not already present in the resume.
+12. IMPORTANT: I want all the sections to be enhanced very well.
+
+Don't mention any escape characters like \n or \t in the output.
+Just give me an entire HTML document in the single line without any new lines or tabs.
+The font size of the output should be 12px and font family should be verdana. <body style=font-family:verdana;font-size:12px;>
+
+Return the output strictly as valid HTML code, starting from <html> and ending at </html>. Do not wrap it in Markdown or code blocks. Do not include any explanations—only the HTML content.
+The main intent is to enhance the profile and increase the chances of getting shortlisted for the job. And main priority is to increase the match score of the profile with the job description. And the 
+match score should be more than 95% with the job description. Keep the sections and order of the original resume intact.
+
+Very Important : And dont reduce the content of the original resume like description, skills, and experience.
+You are allowed to expand the content as needed for clarity, completeness, and impact.
+"""
+
         
         # Prepare messages for OpenAI API
         messages = [
-            {"role": "system", "content": system_prompt},
+            {"role": "system", "content": enhance_resume_prompt},
             {"role": "user", "content": f"JOB DESCRIPTION:\n{jd_content}\n\nORIGINAL RESUME:\n{profile_content}"}
         ]
         
         enhanced_content = generate_ai_completion(messages)
 
-        enhanced_content_escaped = format_text(enhanced_content)
+        enhanced_content_escaped = enhanced_content
 
         return enhanced_content_escaped
         
@@ -111,30 +121,48 @@ def enhance_profile_with_custom_prompt(profile_content, jd_content, custom_promp
     try:
         # Base system prompt with custom instructions
         system_prompt = """
-        You are an expert resume enhancer. Your task is to improve the provided resume 
-        to better align with the job description, following the specific instructions below.
-        
-        Return the enhanced resume as a well-formatted string with appropriate escape characters 
-        for proper display in documents. Maintain proper formatting with newlines (\\n) and 
-        other formatting characters as needed.
-        
-        CUSTOM INSTRUCTIONS:
-        """
+You are an expert resume enhancer. Your task is to improve the provided profile 
+to better align with the job description, while strictly preserving all original information.
+
+Follow these guidelines carefully:
+
+1. Highlight relevant skills and experiences that match the job description. No matter how the resume is structured, ensure that the most relevant skills and experiences are prominently displayed.
+from the job description.
+2. Reword achievements to better reflect the job requirements.
+3. Reorganize the content using clear, semantic HTML structure with tags like <h1>, <h2>, <p>, <b>, <ul>, and <li> for better readability and formatting.
+4. Add industry-specific keywords from the job description naturally throughout the resume.
+5. Maintain the original core facts and experiences and don't remove anything I want it in same length.
+6. **Maintain Word Count:** Ensure the enhanced resume stays within ±5% of the original word count.
+7. Do not add any new sections or introduce information that does not already exist in the original resume.
+8. In the section, add the skills from the job description that are not already present in the resume.
+9. You need to add the skills in the projects section for all projects from the job description that are not already present in the resume.
+10. And every project should have 3-5 liines of description and the relevant skills should be mentioned there itself.
+11. So wherever the overall skills are mentioned, you need to add the skills from the job description that are not already present in the resume.
+
+
+Return the output strictly as valid HTML code, starting from <html> and ending at </html>. Do not wrap it in Markdown or code blocks. Do not include any explanations—only the HTML content.
+The main intent is to enhance the profile and increase the chances of getting shortlisted for the job. And main priority is to increase the match score of the profile with the job description. And the 
+match score should be more than 95% with the job description.
+You are allowed to expand the content as needed for clarity, completeness, and impact. Do not try to keep the output the same length as the input.
+Don't mention any escape characters like \n or \t in the output.
+Just give me an entire HTML document in the single line without any new lines or tabs.
+The font size of the output should be 12px and font family should be verdana. <body style=font-family:verdana;font-size:12px;>
+
+Important: However, if there is any conflict, the Custom Instructions below take the highest priority over these general rules.
+"""
         
         # Combine system prompt with custom prompt
-        full_system_prompt = f"{system_prompt}\n{custom_prompt}"
+        full_system_prompt = f"{system_prompt} This is the custom prompt{custom_prompt}"
         
         # Prepare messages for OpenAI API
         messages = [
             {"role": "system", "content": full_system_prompt},
-            {"role": "user", "content": f"JOB DESCRIPTION:\n{jd_content}\n\nORIGINAL RESUME:\n{profile_content}"}
+            {"role": "user", "content": f"JOB DESCRIPTION: {jd_content}\n\nORIGINAL RESUME:\n{profile_content}"}
         ]
         
         enhanced_content = generate_ai_completion(messages)
-        
-        enhanced_content_escaped = format_text(enhanced_content)
-        
-        return enhanced_content_escaped
+
+        return enhanced_content
         
     except Exception as e:
         logger.error(f"Error enhancing profile with custom prompt: {str(e)}")

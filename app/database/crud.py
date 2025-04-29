@@ -126,11 +126,12 @@ def enhanceProfile(db: Session, profile_id: int, jd_id: int):
     enhanced_content = enhance_profile(decompress_string(profile.parsed_content), decompress_string(jd.content))
 
      # Calculate match percentage
-    # match_percentage = calculate_similarity(decompress_string(jd.content), decompress_string(enhanced_content))
+    match_percentage = calculate_similarity(decompress_string(jd.content), decompress_string(enhanced_content))
 
     enhanced_profile = models.EnhancedProfile(
         employee_id=profile.id,
         job_description_id=jd.id,
+        match_percentage=match_percentage,
         enhanced_content=compress_string(enhanced_content)
     )
     db.add(enhanced_profile)
