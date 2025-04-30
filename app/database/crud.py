@@ -8,7 +8,6 @@ from app.utils.helpers import extract_text_from_file
 from app.services.match import calculate_similarity
 from app.services.enhance import enhance_profile
 from app.services.enhance import enhance_profile_with_prompt
-from app.utils.helpers import compress_string, decompress_string
 
 log = get_logger()
 def createCompany(db: Session, company: dto.CompanyCreate):
@@ -39,7 +38,7 @@ def createEmployeeProfile(db: Session, profile: dto.EmployeeProfileCreate):
         filename=profile.filename,
         match_percentage=match_percentage,
         name=profile.name,
-        parsed_content= compress_string(profile.parsed_content)
+        parsed_content= profile.parsed_content
     )
   
     db.add(new_profile)
@@ -62,7 +61,7 @@ def createJobDescription(db: Session, jd: dto.JobDescriptionCreate):
     
     new_jd = models.JobDescription(
         company_id=jd.company_id,
-        content=compress_string(jd.parsed_content),
+        content=jd.parsed_content,
         title=jd.title,
         filename=jd.filename
     )
@@ -109,7 +108,7 @@ def enhanceProfile(db: Session, profile_id: int, jd_id: int):
         return {
             "message": "Profile already enhanced",
             "match_percentage": existing_enhanced_profile.match_percentage,
-            "enhanced_content": decompress_string(existing_enhanced_profile.enhanced_content)
+            "enhanced_content": existing_enhanced_profile.enhanced_content
         }
     
 
@@ -123,16 +122,16 @@ def enhanceProfile(db: Session, profile_id: int, jd_id: int):
         log.error(f"Job description with ID {jd_id} does not exist.")
         raise ResourceNotFoundException(f"Job description with ID {jd_id} does not exist.")
 
-    enhanced_content = enhance_profile(decompress_string(profile.parsed_content), decompress_string(jd.content))
+    enhanced_content = enhance_profile(profile.parsed_content, jd.content)
 
      # Calculate match percentage
-    match_percentage = calculate_similarity(decompress_string(jd.content), decompress_string(enhanced_content))
+    match_percentage = calculate_similarity(jd.content, enhanced_content)
 
     enhanced_profile = models.EnhancedProfile(
         employee_id=profile.id,
         job_description_id=jd.id,
         match_percentage=match_percentage,
-        enhanced_content=compress_string(enhanced_content)
+        enhanced_content=enhanced_content
     )
     db.add(enhanced_profile)
 
@@ -141,7 +140,7 @@ def enhanceProfile(db: Session, profile_id: int, jd_id: int):
     db.refresh(enhanced_profile)
     return {
         "message": "Profile enhanced successfully",
-        "enhanced_content": decompress_string(enhanced_content)
+        "enhanced_content": enhanced_content
     }
 
 def enhanceProfileWithPrompt(db: Session, profile_id: int, jd_id: int, prompt: str):
@@ -161,13 +160,12 @@ def enhanceProfileWithPrompt(db: Session, profile_id: int, jd_id: int, prompt: s
         log.error(f"Enhanced profile with ID {profile_id} does not exist.")
         raise ResourceNotFoundException(f"Enhanced profile with ID {profile_id} does not exist.")
 
-    enhanced_content = enhance_profile_with_prompt(decompress_string(existing_enhanced_profile.enhanced_content), 
-                                    decompress_string(jd.content), prompt)
+    enhanced_content = enhance_profile_with_prompt(existing_enhanced_profile.enhanced_content, jd.content, prompt)
 
     # Calculate match percentage
-    match_percentage = calculate_similarity(decompress_string(jd.content), decompress_string(enhanced_content))
+    match_percentage = calculate_similarity(jd.content, enhanced_content)
 
-    existing_enhanced_profile.enhanced_content = compress_string(enhanced_content)
+    existing_enhanced_profile.enhanced_content = enhanced_content
     existing_enhanced_profile.match_percentage = match_percentage
     db.add(existing_enhanced_profile)
     with safe_commit_transaction(db):
@@ -176,5 +174,5 @@ def enhanceProfileWithPrompt(db: Session, profile_id: int, jd_id: int, prompt: s
     return {
         "message": "Profile enhanced successfully with the given prompt",
         "match_percentage": match_percentage,
-        "enhanced_content": decompress_string(enhanced_content)
+        "enhanced_content": enhanced_content
     }
