@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, JSON
 from sqlalchemy.orm import relationship
 from sqlalchemy import ForeignKey, Text
 from app.database.dbSession import Base
@@ -22,8 +22,7 @@ class EmployeeProfile(Base, TimestampMixin):
     company_id = Column(Integer, ForeignKey("company.id"))
     job_description_id = Column(Integer, ForeignKey("job_description.id"))
     name = Column(String, nullable=False)
-    parsed_content = Column(Text, nullable=False)
-    match_percentage = Column(Integer)
+    parsed_content = Column(JSON, nullable=False)
     filename = Column(String, nullable=False)
 
     company = relationship("Company", back_populates="employees")
@@ -51,8 +50,7 @@ class EnhancedProfile(Base, TimestampMixin):
     id = Column(Integer, primary_key=True, index=True)
     employee_id = Column(Integer, ForeignKey("employee_profile.id"))
     job_description_id = Column(Integer, ForeignKey("job_description.id"))
-    enhanced_content = Column(Text, nullable=False)
-    match_percentage = Column(Integer)
+    enhanced_content = Column(JSON, nullable=False)
 
     employee = relationship("EmployeeProfile", back_populates="enhanced_profiles")
     job_description = relationship("JobDescription", back_populates="enhanced_profiles")

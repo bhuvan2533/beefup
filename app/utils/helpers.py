@@ -1,12 +1,9 @@
 from docx import Document
 import textract
-from pdfminer.high_level import extract_text
 from fastapi import UploadFile
 from app.exception_handlers import InvalidFileTypeException
 from io import BytesIO
 import json
-import gzip
-import base64
 import fitz
 
 def extract_text_from_pdf(uploaded_file: UploadFile) -> str:

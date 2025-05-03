@@ -1,24 +1,22 @@
-from app.utils.openai_helper import enhance_profile_with_ai, enhance_profile_with_custom_prompt
+from app.ai.service import extract_profile_and_format
+from app.ai.service import enhance_profile_with_jd
 from app.utils.logger import get_logger
 
 logger = get_logger()
 
-def enhance_profile(profile_content, jd_content):
+async def extractFromProfile(profile_content):
+    logger.info("Extracting profile content to structured format")
+    
+    extracted_content = await extract_profile_and_format(profile_text=profile_content)
+    
+    logger.info("Profile extraction completed")
+    return extracted_content.model_dump()
 
-    logger.info("Enhancing profile with job description")
-    
-    # Use OpenAI helper to enhance the profile
-    enhanced_content = enhance_profile_with_ai(profile_content, jd_content)
-    
-    logger.info("Profile enhancement completed: " + enhanced_content)
-    return enhanced_content
 
-def enhance_profile_with_prompt(profile_content, jd_content, prompt):
-
-    logger.info("Enhancing profile with job description using custom prompt")
+async def enhanceProfileWithJd(jd_content, structured_profile):
+    logger.info("Enhancing profile content with job description")
     
-    # Use OpenAI helper with custom prompt to enhance the profile
-    enhanced_content = enhance_profile_with_custom_prompt(profile_content, jd_content, prompt)
+    enhanced_content = await enhance_profile_with_jd(jd=jd_content, structured_profile=structured_profile)
     
-    logger.info("Profile enhancement with custom prompt completed")
-    return enhanced_content
+    logger.info("Profile enhancement completed")
+    return enhanced_content.model_dump()
