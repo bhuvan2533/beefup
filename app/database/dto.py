@@ -16,3 +16,7 @@ class JobDescriptionCreate(BaseModel):
     parsed_content: str
     title: Optional[str] = None
     filename: Optional[str] = None
+
+class ProfileUpdateRequest(BaseModel):
+    enhanced_profile_id: int
+    content: dict
