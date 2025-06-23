@@ -7,7 +7,7 @@ load_dotenv()
 logger = get_logger()
 
 OPEN_AI_API_KEY = os.getenv("OPENAI_API_KEY")
-OPEN_AI_MODEL = os.getenv("OPENAI_MODEL")
+OPEN_AI_MODEL = os.getenv("OPEN_AI_MODEL")
 
 if not OPEN_AI_API_KEY:
     logger.error("OpenAI API key is not set in environment variables.")
