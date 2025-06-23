@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 from app.utils.logger import get_logger
 
-load_dotenv()
+load_dotenv(override=True)
 logger = get_logger()
 
 OPEN_AI_API_KEY = os.getenv("OPENAI_API_KEY")
