@@ -32,12 +32,13 @@ Candidate Structured Profile:
 - Do NOT remove any content from the original profile.
 - Skills must be behavioral only, may be you can look few keywords from profile and use the synonyms of them restrict it to be less than 5 skills,
   no tech skills or tools.
+- Add emerging or trending skills **only if explicitly mentioned or implied in the JD** and if **they align with the candidate's experience or project context**.
+- Include at least 2 relevant emerging technologies or tools not explicitly listed in the JD only if they are a logical fit for the candidate’s responsibilities or project context.
 
 🎯 SUMMARY SECTION:
 - Rephrase and enhance the summary to be more compelling and JD-aligned.
 - Do NOT mention technologies or tools in the summary.
 - Add emphasis on experience areas, responsibilities, and behavioral strengths relevant to the JD.
-
 
 🧩 PROJECTS SECTION:
 - For each project:
@@ -69,6 +70,7 @@ Your task is to enhance rephrase the profile based on the JD, ensuring that ever
   Database: <comma-separated list>
   Tools: <comma-separated list>
   Programming Languages: <comma-separated list>
+  AI Tools: <comma-separated list>
 
 - Skills (Behavioral only from the JD and from the profile, no tech skills or tools):
   - Skill 1

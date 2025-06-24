@@ -17,6 +17,7 @@ class Technologies(BaseModel):
     database: Optional[List[str]] = []
     tools: Optional[List[str]] = []
     languages: Optional[List[str]] = []
+    AI_technologies: Optional[List[str]] = []
 
     class Config:
         orm_mode = True
