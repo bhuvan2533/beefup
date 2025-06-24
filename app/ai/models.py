@@ -30,6 +30,7 @@ class EnhancedProfile(BaseModel):
     technologies: Optional[Technologies] = Technologies()
     skills: Optional[List[str]] = []
     enhanced_projects: Optional[List[Project]] = []
+    skill_gaps: Optional[List[str]] = []
 
     class Config:
         orm_mode = True

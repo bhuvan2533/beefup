@@ -33,7 +33,7 @@ Candidate Structured Profile:
 - Skills must be behavioral only, may be you can look few keywords from profile and use the synonyms of them restrict it to be less than 5 skills,
   no tech skills or tools.
 - Add emerging or trending skills **only if explicitly mentioned or implied in the JD** and if **they align with the candidate's experience or project context**.
-- Include at least 2 relevant emerging technologies or tools not explicitly listed in the JD only if they are a logical fit for the candidate’s responsibilities or project context.
+- Include at least 2 relevant emerging technologies or tools not explicitly listed in the JD only if they are a logical fit for the candidate's responsibilities or project context.
 - If the JD mentions total years of experience required, ensure that the summary section reflects that same number clearly and naturally, even if not explicitly present in the profile.
 - Ensure that at least one tool or technology from the JD (not already in the profile) is included in the enhanced profile — only if its use can be reasonably aligned with the candidate's context or project responsibilities.
 
@@ -97,6 +97,10 @@ Your task is to enhance rephrase the profile based on the JD, ensuring that ever
      - ...
      - ...
 
+- Skill Gaps: (Identify the tools, technologies, skills, or qualifications mentioned in the JD that are missing from the original profile. Use natural, easy-to-understand phrases to explain what is missing and why it’s relevant — without strictly following one sentence structure. The goal is to highlight what’s absent in a way the user can immediately understand.)
+  - <What's missing and why it matters>
+  - <What's missing and why it matters>
+  - ...
 🧱 STRUCTURED FORMAT (MANDATORY):
 {format_instructions}
 """
