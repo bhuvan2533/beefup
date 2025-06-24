@@ -5,12 +5,28 @@ from app.exception_handlers import InvalidFileTypeException
 from io import BytesIO
 import json
 import fitz
+import pytesseract
+from PIL import Image
 
 def extract_text_from_pdf(uploaded_file: UploadFile) -> str:
     uploaded_file.file.seek(0)
     pdf_bytes = uploaded_file.file.read()
     doc = fitz.open(stream=pdf_bytes, filetype="pdf")
     text = " ".join([page.get_text() for page in doc]).replace("\n", " ").replace("\r", " ")
+
+    # Text too short, likely non-selectable or image-based, use OCR
+    if len(text.strip()) < 50:
+        ocr_text = []
+        for page in doc:
+            # Render page as an image (pixmap)
+            pix = page.get_pixmap(matrix=fitz.Matrix(300 / 72, 300 / 72))  # High DPI for better OCR accuracy
+            img_bytes = pix.tobytes("png")
+            img = Image.open(BytesIO(img_bytes))
+            page_text = pytesseract.image_to_string(img, lang="eng")  # Perform OCR
+            ocr_text.append(page_text.replace("\n", " ").replace("\r", " "))
+        text = " ".join(ocr_text)
+
+    doc.close()  # Close the document to free resources
     return json.dumps(text)[1:-1]
 
 
