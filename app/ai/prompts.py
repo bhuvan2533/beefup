@@ -46,7 +46,7 @@ Candidate Structured Profile:
 - For each project:
   For each project in the profile:
 
-- From the candidate's projects, choose the **top 3 that are most closely aligned with the JD in terms of responsibilities, tools, or domain relevance**. If none align clearly, select **any 3** from the original profile.
+- Arrange **all** the candidate's projects in the **order of their relevance to the JD**, starting with those most aligned in terms of responsibilities, tools, or domain relevance. Ensure every listed project is retained and rewritten, regardless of relevance level.
 
 - Rephrase and expand the **Description** to make it clearer, more impactful, and better aligned with the responsibilities and expectations outlined in the JD.
 
@@ -58,7 +58,15 @@ Candidate Structured Profile:
   - Do not add irrelevant JD tools/skills that don't logically fit the project's description nature or scope.
   - Only enhance with JD elements when there is a clear functional or thematic alignment.
 
-Be realistic, and context-aware while enriching the project with JD-relevant content.
+- Add the following additional details for each project, ensuring they are clearly relevant to the JD:
+  - **Client**: Mention the client or organization the project was done for. Include its domain if stated in the profile; if not, infer based on context. If limited info is available, just state the name.
+  - **Business Case**: Summarize the core problem or goal the project aimed to solve, as described in the profile.
+  - **Solution**: Briefly describe the solution or approach taken to address the business case, aligning it with the expectations or themes in the JD.
+  - **Project Live Links**: Mention any live demo, website, or GitHub link listed in the profile, if available.
+
+- Ensure all the projects present in the input profile are included in the output, even if they are not directly relevant to the JD. The goal is to enhance the profile while maintaining all original projects.
+
+Be realistic and context-aware while enriching the project with JD-relevant content.
 
 Your task is to enhance rephrase the profile based on the JD, ensuring that everything is relevant and aligned with the JD.
 
@@ -84,23 +92,33 @@ Your task is to enhance rephrase the profile based on the JD, ensuring that ever
 - Projects:
   1. Title: <Project Title>
      Tech Stack: <List of technologies/tools used, including JD-aligned additions>
+     Client: <Name of the client and domain if available, else just the name. If there is no client name given, infer the domain from the input profile>
+     Business Case: <Short statement of the problem the project aimed to solve, infer from the project description if not explicitly stated>
+     Solution: <Short explanation of the approach taken, inferred from the respective project description>
      Description: <Expanded description aligned with JD, same length as original, try to have it in 3-5 lines>
-     Contribution: (Try to have it in 3-5 lines)
-     - Responsibility or contribution 1
-     - Responsibility or contribution 2
-     - ...
+     Contribution: (Each point should be a well-articulated 2-3 lined sentences that clearly explains the action taken, its purpose, and if possible, the impact. Aim for 4-5 longer, context-rich points that reflect the JD responsibilities.)
+    - <Expanded, detailed contribution 1>
+    - <Expanded, detailed contribution 2>
+    - ...
+     Project Live Links: <Any provided link or demo URL, else leave empty>
      
   2. Title: ...
      Tech Stack: ...
+     Client: ...
+     Business Case: ...
+     Solution: ...
      Description: ...
      Contribution:
      - ...
      - ...
+     Project Live Links: ...
 
-- Skill Gaps: (Identify the tools, technologies, skills, or qualifications mentioned in the JD that are missing from the original profile. Use natural, easy-to-understand phrases to explain what is missing and why it’s relevant — without strictly following one sentence structure. The goal is to highlight what’s absent in a way the user can immediately understand.)
+- Skill Gaps: (Identify the tools, technologies, skills, or qualifications mentioned in the JD that are missing from the original profile. Use natural, easy-to-understand phrases to explain what is missing and why it's relevant — without strictly following one sentence structure. The goal is to highlight what's absent in a way the user can immediately understand.)
   - <What's missing and why it matters>
   - <What's missing and why it matters>
   - ...
+
 🧱 STRUCTURED FORMAT (MANDATORY):
 {format_instructions}
 """
+

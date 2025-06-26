@@ -4,8 +4,12 @@ from pydantic import BaseModel
 class Project(BaseModel):
     title: Optional[str] = None
     tech_stack: Optional[List[str]] = []
+    client: Optional[str] = None
+    business_case: Optional[str] = None
+    solution: Optional[str] = None
     description: Optional[str] = None
     contribution: Optional[List[str]] = []
+    project_live_links: Optional[str] = None
 
     class Config:
         orm_mode = True
