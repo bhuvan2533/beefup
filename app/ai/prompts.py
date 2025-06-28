@@ -97,9 +97,9 @@ Your task is to enhance rephrase the profile based on the JD, ensuring that ever
      Solution: <Short explanation of the approach taken, inferred from the respective project description>
      Description: <Expanded description aligned with JD, same length as original, try to have it in 3-5 lines>
      Contribution: (Each point should be a well-articulated 2-3 lined sentences that clearly explains the action taken, its purpose, and if possible, the impact. Aim for 4-5 longer, context-rich points that reflect the JD responsibilities.)
-    - <Expanded, detailed contribution 1>
-    - <Expanded, detailed contribution 2>
-    - ...
+     - <Expanded, detailed contribution 1>
+     - <Expanded, detailed contribution 2>
+     - ...
      Project Live Links: <Any provided link or demo URL, else leave empty>
      
   2. Title: ...
@@ -118,7 +118,14 @@ Your task is to enhance rephrase the profile based on the JD, ensuring that ever
   - <What's missing and why it matters>
   - ...
 
+- Technical Expertise:
+  (Based on the enhanced Technologies section, list 4-5 succinct, insightful technical capability statements. Each point should reflect a strength or area of competence in a practical, real-world or JD-relevant context. For example:)
+  - Proficient in building scalable backend systems using Node.js and Express.
+  - Skilled in designing responsive UI components with React and TailwindCSS.
+  - Experience integrating AI tools like LangChain or OpenAI APIs in production-grade apps.
+  - Adept at using Docker, GitHub Actions, and Jira for streamlined DevOps and task management.
+  - Strong command over relational and NoSQL databases including PostgreSQL and MongoDB.
+
 🧱 STRUCTURED FORMAT (MANDATORY):
 {format_instructions}
 """
-
