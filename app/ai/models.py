@@ -36,6 +36,8 @@ class EnhancedProfile(BaseModel):
     enhanced_projects: Optional[List[Project]] = []
     skill_gaps: Optional[List[str]] = []
     technical_expertise: Optional[List[str]] = []
+    before_enhancement: Optional[int] = None
+    after_enhancement: Optional[int] = None
 
     class Config:
         orm_mode = True
