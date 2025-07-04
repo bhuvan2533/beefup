@@ -214,6 +214,11 @@ These two fields measure the overlap between the job description and the origina
 - Use this to estimate the match percentage as a whole number between 0 and 100.
 - Return only the number — no symbol, no words. Example: 62
 
+IMPORTANT: At the end of your output, ALWAYS include the following two fields as integers:
+- before_enhancement: The percentage match (0-100) between the job description and the original profile, as an integer.
+- after_enhancement: The percentage match (0-100) between the job description and the enhanced profile, as an integer.
+If you cannot determine a value, make your best estimate. Do not leave these fields blank or null.
+
 FORMAT TO FOLLOW:
 
 - Name: <Candidate Name>
@@ -255,8 +260,8 @@ FORMAT TO FOLLOW:
   - <Real-world technical capability based on tech stack>
   - ...
 
-- Percentage Match between the given job description and the original profile (Candidate Structured Profile): <e.g., 61>
-- Percentage Match between the given job description and the enhanced profile: <e.g., 87>
+- before_enhancement: <integer between 0 and 100>
+- after_enhancement: <integer between 0 and 100>
 
 🧱 STRUCTURED FORMAT (MANDATORY):
 {format_instructions}
