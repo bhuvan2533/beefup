@@ -8,13 +8,14 @@ from app.utils.logger import get_logger
 from app.exception_handlers import DatabaseException
 import os
 
-load_dotenv()
+load_dotenv(override=True)
 logger = get_logger()
 
-DATABASE_URL = os.getenv("DATABASE_URL")
+# DATABASE_URL = os.getenv("DATABASE_URL")
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
 
 # SQLAlchemy setup
-engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+engine = create_engine(SQLALCHEMY_DATABASE_URL, pool_pre_ping=True)
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 Base = declarative_base()
 

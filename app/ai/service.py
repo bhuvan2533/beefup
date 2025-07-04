@@ -4,6 +4,7 @@ import json
 import app.ai.setup as setup
 from app.ai.prompts import EXTRACTION_PROMPT, JD_ENHANCEMENT_PROMPT
 from app.ai.models import EnhancedProfile
+from app.utils.helpers import preprocess_llm_output, extract_text_from_llm_output
 
 llm = setup.LLM
 
@@ -15,8 +16,11 @@ async def extract_profile_and_format(profile_text: str) -> EnhancedProfile:
         input_variables=["profile"],
         partial_variables={"format_instructions": parser.get_format_instructions()}
     )
-    chain = prompt | llm | parser
-    result = await chain.ainvoke({"profile": profile_text})
+    chain = prompt | llm
+    raw_output = await chain.ainvoke({"profile": profile_text})
+    raw_output_text = extract_text_from_llm_output(raw_output)
+    cleaned_output = preprocess_llm_output(raw_output_text)
+    result = parser.parse(cleaned_output)
     return result
 
 
@@ -26,9 +30,12 @@ async def enhance_profile_with_jd(jd: str, structured_profile: EnhancedProfile) 
         input_variables=["jd", "profile"],
         partial_variables={"format_instructions": parser.get_format_instructions()}
     )
-    chain = prompt | llm | parser
-    result = await chain.ainvoke({
+    chain = prompt | llm
+    raw_output = await chain.ainvoke({
         "jd": jd,
         "profile": json.dumps(structured_profile)
     })
+    raw_output_text = extract_text_from_llm_output(raw_output)
+    cleaned_output = preprocess_llm_output(raw_output_text)
+    result = parser.parse(cleaned_output)
     return result

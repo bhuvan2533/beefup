@@ -7,6 +7,7 @@ import json
 import fitz
 import pytesseract
 from PIL import Image
+from langchain_core.messages import AIMessage, BaseMessage
 
 def extract_text_from_pdf(uploaded_file: UploadFile) -> str:
     uploaded_file.file.seek(0)
@@ -64,3 +65,23 @@ def extract_text_from_file(uploaded_file: UploadFile) -> str:
         return extract_text_from_txt(uploaded_file)
     else:
         raise InvalidFileTypeException("Unsupported file format. Supported formats: .pdf, .docx, .doc, .txt")
+
+def preprocess_llm_output(output: str) -> str:
+    output = output.strip()
+    if output.startswith("```json"):
+        output = output[len("```json"):].strip()
+    elif output.startswith("```"):
+        output = output[len("```"):].strip()
+    if output.endswith("```"):
+        output = output[:-3].strip()
+    return output
+
+def extract_text_from_llm_output(output: AIMessage | BaseMessage | str) -> str:
+    
+    # Handle LangChain AIMessage or BaseMessage
+    if hasattr(output, 'content') and isinstance(output.content, str):
+        return output.content
+    if isinstance(output, str):
+        return output
+        
+    return str(output)

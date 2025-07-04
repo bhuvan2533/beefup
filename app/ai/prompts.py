@@ -142,7 +142,7 @@ Profile:
 {profile}
 
 Instructions:
-- Extract only what is present. Do not add or fabricate details.
+- Extract **all** projects listed in the profile. Do not skip any, even if they seem similar or less important.
 - If any field is missing, leave it blank.
 - Keep all tool/tech names exactly as in the profile, but fix spelling errors.
 - Follow the EnhancedProfile schema.
@@ -179,13 +179,13 @@ SUMMARY:
 - Maximum number of words is ~30-40
 
 PROJECTS:
-- Retain all original projects.
-- Rearrange based on relevance of the project use case to the JD.
+- Retain **all original projects**.
+- Rearrange based on relevance of the enhanced project use case to the JD.
 - For each project:
   - Expand Description to match JD expectations.
-  - Rewrite Contributions: 4-5 bullets, each ~25-35 words explaining action, purpose, and outcome.
+  - Rewrite Contributions: 4-5 bullets, each ~25-35 words explaining action, purpose, and outcome. Include the tools given in the JD.
   - Always prefer JD-specified tools and technologies over those in the original profile.
-    - Replace tools in the original project (e.g., MongoDB, REST) with relevant, modern equivalents from the JD (e.g., PostgreSQL, GraphQL, Go, Supabase) — if the context or purpose is similar.
+    - Replace tools in the original project with relevant equivalents from the JD  — if the context or purpose is similar.
     - If the JD tools are **newer, more standard, or directly relevant**, assume they are used **in place of** older or unspecified tools in the profile.
     - Do this strictly for every project where such mapping is reasonable — do **not** retain outdated tools alongside JD ones.
     - Reflect this clearly in both the Tech Stack and Contribution sections of each project.

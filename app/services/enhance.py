@@ -19,4 +19,5 @@ async def enhanceProfileWithJd(jd_content, structured_profile):
     enhanced_content = await enhance_profile_with_jd(jd=jd_content, structured_profile=structured_profile)
     
     logger.info("Profile enhancement completed")
+    logger.info(enhanced_content)
     return enhanced_content.model_dump()
