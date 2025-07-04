@@ -11,6 +11,11 @@ router = APIRouter()
 def create_company(company: dto.CompanyCreate, db: Session = Depends(get_db)):
     return crud.createCompany(db, company)
 
+# Temporary API for internal usage
+@router.get("/company/{name}")
+def get_company_by_name(name: str, db: Session = Depends(get_db)):
+    return crud.getCompanyByName(db, name)
+
 @router.post("/upload/{file_type}")
 async def upload_file(
     file_type: str,  # "jd" or "profile"

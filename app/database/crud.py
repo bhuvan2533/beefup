@@ -19,6 +19,17 @@ def createCompany(db: Session, company: dto.CompanyCreate):
         "name": new_company.name,
     }
 
+def getCompanyByName(db: Session, name: str):
+    company = db.query(models.Company).filter(
+        models.Company.name == name
+    ).first()
+    if not company:
+        raise ResourceNotFoundException(f"Company with name {name} does not exist.")
+    return {
+        "id": company.id,
+        "name": company.name,
+    }
+
 async def createEmployeeProfile(db: Session, profile: dto.EmployeeProfileCreate):
     company = db.query(models.Company).filter(models.Company.id == profile.company_id).first()
     if not company:
