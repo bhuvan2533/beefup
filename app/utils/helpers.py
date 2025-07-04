@@ -8,6 +8,8 @@ import fitz
 import pytesseract
 from PIL import Image
 from langchain_core.messages import AIMessage, BaseMessage
+import tiktoken
+import app.ai.setup as setup
 
 def extract_text_from_pdf(uploaded_file: UploadFile) -> str:
     uploaded_file.file.seek(0)
@@ -76,12 +78,14 @@ def preprocess_llm_output(output: str) -> str:
         output = output[:-3].strip()
     return output
 
-def extract_text_from_llm_output(output: AIMessage | BaseMessage | str) -> str:
-    
-    # Handle LangChain AIMessage or BaseMessage
+def extract_text_from_llm_output(output: AIMessage | BaseMessage | str) -> str: 
     if hasattr(output, 'content') and isinstance(output.content, str):
         return output.content
     if isinstance(output, str):
         return output
         
     return str(output)
+
+def count_tokens(text: str, model: str=setup.OPEN_AI_MODEL) -> int:
+    encoding = tiktoken.encoding_for_model(model)
+    return len(encoding.encode(text))

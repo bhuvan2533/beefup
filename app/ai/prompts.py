@@ -166,11 +166,12 @@ GENERAL RULES:
 - Keep structure, tone, and approximate length same as the input profile.
 - Retain the role of the candidate, present in the input profile, in the enhanced profile as well.
 - Add tools/technologies only if mentioned in JD and contextually applicable.
-- Do not remove any original content.
+- DO NOT remove any original content.
 - Use only behavioral skills (no technical tools); max 5. Synonyms allowed.
 - Add 2 relevant emerging tools only if strongly aligned with projects or JD.
 - If JD mentions years of experience, reflect it clearly in the Summary. 
 - Add at least 1 relevant JD tool to Tech Stack (if missing and applicable).
+- Output ONLY valid JSON. Do not include any comments, explanations, or extra text. Do not use trailing commas.
 
 SUMMARY:
 - Rephrase to align with the JD — focus on responsibilities and behavioral strengths.
