@@ -180,7 +180,8 @@ SUMMARY:
 - Maximum number of words is ~30-40
 
 PROJECTS:
-- Retain **all original projects**.
+- Retain **ALL original projects exactly as in the input profile** — DO NOT skip any, even if similar, outdated, or less relevant.
+- Rewrite each project as per below rules — but all must be included. There should be exactly the same number of projects as in the input profile.
 - Rearrange based on relevance of the enhanced project use case to the JD.
 - For each project:
   - Expand Description to match JD expectations.
@@ -262,6 +263,9 @@ FORMAT TO FOLLOW:
 
 - before_enhancement: <integer between 0 and 100>
 - after_enhancement: <integer between 0 and 100>
+
+- The number of projects in the output MUST match the number in the input. This is a hard constraint.
+- If the original profile has 10 projects, the enhanced output MUST have 10 enhanced projects.
 
 🧱 STRUCTURED FORMAT (MANDATORY):
 {format_instructions}

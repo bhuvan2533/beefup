@@ -46,3 +46,17 @@ async def get_enhanced_profile(
     enhanced_profile_id: int,
     db: Session = Depends(get_db)):
     return crud.getEnhancedProfile(db, enhanced_profile_id)
+
+# Test API to go through JD
+@router.get("/jd/{jd_id}")
+async def get_jd(
+    jd_id: int,
+    db: Session = Depends(get_db)):
+    return crud.getJobDescription(db, jd_id)
+
+# Test API to check original profile
+@router.get("/profile/original/{profile_id}")
+async def get_profile(
+    profile_id: int,
+    db: Session = Depends(get_db)):
+    return crud.getOriginalProfile(db, profile_id)

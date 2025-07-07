@@ -30,6 +30,28 @@ def getCompanyByName(db: Session, name: str):
         "name": company.name,
     }
 
+def getJobDescription(db: Session, jd_id: int):
+    jd = db.query(models.JobDescription).filter(
+        models.JobDescription.id == jd_id
+    ).first()
+    if not jd:
+        raise ResourceNotFoundException(f"Job Description ID {jd_id} not available")
+    return {
+        "id": jd.id,
+        "content": jd.content
+    }
+
+def getOriginalProfile(db: Session, profile_id: int):
+    original_profile = db.query(models.EmployeeProfile).filter(
+        models.EmployeeProfile.id == profile_id
+    ).first()
+    if not original_profile:
+        raise ResourceNotFoundException(f"Profile ID {profile_id} not found")
+    return {
+        "profile_id": original_profile.id,
+        "original_content": original_profile.parsed_content
+    }
+
 async def createEmployeeProfile(db: Session, profile: dto.EmployeeProfileCreate):
     company = db.query(models.Company).filter(models.Company.id == profile.company_id).first()
     if not company:
