@@ -116,9 +116,9 @@ async def createFileEntry(db: Session, file: UploadFile, file_type: str, company
         raise ResourceNotFoundException("Invalid file type. Supported types are 'jd' and 'profile'.")
     parsed_content = extract_text_from_file(file)
 
-    if not parsed_content:
-        log.error(f"File is empty or could not be parsed: {file.filename}")
-        raise BadRequestException("File is empty or could not be parsed.")
+    # if not parsed_content:
+    #     log.error(f"File is empty or could not be parsed: {file.filename}")
+    #     raise BadRequestException("File is empty or could not be parsed.")
     
     if file_type == "jd": 
         jd = dto.JobDescriptionCreate(company_id=company_id, filename=file.filename, title=name, parsed_content=parsed_content)
