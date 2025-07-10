@@ -181,19 +181,24 @@ SUMMARY:
 
 PROJECTS:
 - Retain **ALL original projects exactly as in the input profile** — DO NOT skip any, even if similar, outdated, or less relevant.
-- Rewrite each project as per below rules — but all must be included. There should be exactly the same number of projects as in the input profile.
+- Rewrite each project as per the rules below — but all must be included. There should be exactly the same number of projects as in the input profile.
 - Rearrange based on relevance of the enhanced project use case to the JD.
 - For each project:
-  - Expand Description to match JD expectations.
-  - Rewrite Contributions: **Minimum 6 bullet points**, maximum 8, each ~25-35 words.
-    - Each bullet should clearly describe the action taken, purpose behind it, and the outcome.
-    - Use JD-specified tools and responsibilities wherever possible.
+  - Expand the Description to align with JD expectations, focusing on business impact and functionality.
+  - Rewrite Contributions: **Minimum 6 bullet points per project is MANDATORY**, maximum 8.
+    - If the original project has fewer than 6 contributions, you MUST expand or infer additional contributions based on:
+      - the JD,
+      - the project description,
+      - commonly expected responsibilities for similar roles.
+    - Fabricate or extrapolate plausible contributions that match the domain, role, and project context.
+    - Each bullet must be ~25-35 words long, and explain the action, purpose, and outcome.
+    - Include tools and concepts from the JD wherever contextually appropriate.
   - Always prefer JD-specified tools and technologies over those in the original profile.
     - Replace tools in the original project with relevant equivalents from the JD — if the context or purpose is similar.
-    - If the JD tools are **newer, more standard, or directly relevant**, assume they are used **in place of** older or unspecified tools in the profile.
-    - Do this strictly for every project where such mapping is reasonable — do **not** retain outdated tools alongside JD ones.
+    - If JD tools are **newer, more standard, or directly relevant**, assume they were used **instead of** older or unspecified tools in the profile.
+    - Do this strictly and consistently — do **not** retain outdated tools alongside JD ones.
     - Reflect this clearly in both the Tech Stack and Contribution sections of each project.
-  - Add:
+  - Add the following for each project:
     - Client: Mention company (add domain if inferred or given).
     - Business Case: What problem it solved.
     - Solution: What was built or done.
@@ -267,7 +272,8 @@ FORMAT TO FOLLOW:
 - after_enhancement: <integer between 0 and 100>
 
 - The number of projects in the output MUST match the number in the input. This is a hard constraint.
-- If the original profile has 10 projects, the enhanced output MUST have 10 enhanced projects.
+- Each project MUST contain **at least 6 contributions** — even if only 1 or 2 are present in the original profile.
+- It is acceptable to infer or construct additional realistic contributions based on the context of the project and the JD. This is MANDATORY.
 
 🧱 STRUCTURED FORMAT (MANDATORY):
 {format_instructions}
