@@ -185,7 +185,7 @@ PROJECTS:
 - Rearrange based on relevance of the enhanced project use case to the JD.
 - For each project:
   - Expand Description to match JD expectations.
-  - Rewrite Contributions: 4-5 bullets, each ~25-35 words explaining action, purpose, and outcome. Include the tools given in the JD.
+  - Rewrite Contributions: 7-8 bullets, each ~25-35 words explaining action, purpose, and outcome. Include the tools given in the JD.
   - Always prefer JD-specified tools and technologies over those in the original profile.
     - Replace tools in the original project with relevant equivalents from the JD  — if the context or purpose is similar.
     - If the JD tools are **newer, more standard, or directly relevant**, assume they are used **in place of** older or unspecified tools in the profile.
